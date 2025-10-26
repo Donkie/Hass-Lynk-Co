@@ -7,8 +7,9 @@ import pkce
 
 _LOGGER = logging.getLogger(__name__)
 login_b2c_url = "https://login.lynkco.com/lynkcoprod.onmicrosoft.com/b2c_1a_signin_mfa/"
-client_id = "813902c0-0579-43f3-a767-6601c2f5fdbe"
+client_id = "c3e13a0c-8ba7-4ea5-9a21-ecd75830b9e9"
 scope_base_url = "https://lynkcoprod.onmicrosoft.com/mobile-app-web-api/mobile"
+redirect_uri = "msauth://prod.lynkco.app.crisp.prod/2jmj7l5rSw0yVb%2FvlWAYkK%2FYBwk%3D"
 
 
 async def login(email, password, session):
@@ -56,6 +57,44 @@ async def login(email, password, session):
     )
 
 
+def get_auth_uri():
+    code_verifier, code_challenge = pkce.generate_pkce_pair()
+
+    base_url = f"{login_b2c_url}oauth2/v2.0/authorize"
+    params = {
+        "response_type": "code",
+        "scope": f"{scope_base_url}.read {scope_base_url}.write profile offline_access",
+        "code_challenge": code_challenge,
+        "code_challenge_method": "S256",
+        "redirect_uri": redirect_uri,
+        "client_id": client_id,
+    }
+
+    # Build the full URL with query parameters
+    auth_url = f"{base_url}?{urllib.parse.urlencode(params)}"
+    return auth_url, code_verifier, code_challenge
+
+
+async def get_tokens_from_redirect_uri(
+    uri: str,
+    code_verifier,
+    session,
+):
+    parsed_url = urllib.parse.urlparse(uri)
+    code = urllib.parse.parse_qs(parsed_url.query).get("code", [None])[0]
+
+    access_token, refresh_token = await getTokens(
+        code,
+        code_verifier,
+        session,
+    )
+
+    if access_token is None or refresh_token is None:
+        _LOGGER.error("Failed to get tokens. Exiting...")
+        return None, None
+    return access_token, refresh_token
+
+
 async def two_factor_authentication(
     verification_code,
     x_ms_cpim_trans_value,
@@ -98,7 +137,7 @@ async def authorize(code_challenge, session):
         "scope": f"{scope_base_url}.read {scope_base_url}.write profile offline_access",
         "code_challenge": code_challenge,
         "code_challenge_method": "S256",
-        "redirect_uri": "msauth.com.lynkco.prod.lynkco-app://auth",
+        "redirect_uri": redirect_uri,
         "client_id": client_id,
     }
     headers = {
@@ -158,7 +197,7 @@ async def getCombinedSigninAndSignup(
         "accept-language": "en-GB,en;q=0.9",
         "sec-fetch-mode": "navigate",
         "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1",
-        "referer": f"{referer_base_url}?x-client-Ver=1.2.22&state=ABC&client_info=1&prompt=select_account&response_type=code&x-app-name=Lynk%20%26%20Co&code_challenge_method=S256&x-app-ver=2.12.0&scope=https%3A%2F%2Flynkcoprod.onmicrosoft.com%2Fmobile-app-web-api%2Fmobile.read%20https%3A%2F%2Flynkcoprod.onmicrosoft.com%2Fmobile-app-web-api%2Fmobile.write%20openid%20profile%20offline_access&x-client-SKU=MSAL.iOS&x-client-OS=17.4.1&code_challenge={code_challenge}&x-client-CPU=64&redirect_uri=msauth.com.lynkco.prod.lynkco-app%3A%2F%2Fauth&client-request-id=0207E18F-1598-4BD7-AC0F-705414D8B0F7&client_id={client_id}&x-client-DM=iPhone&return-client-request-id=true&haschrome=1",
+        "referer": f"{referer_base_url}?x-client-Ver=1.2.22&state=ABC&client_info=1&prompt=select_account&response_type=code&x-app-name=Lynk%20%26%20Co&code_challenge_method=S256&x-app-ver=2.12.0&scope=https%3A%2F%2Flynkcoprod.onmicrosoft.com%2Fmobile-app-web-api%2Fmobile.read%20https%3A%2F%2Flynkcoprod.onmicrosoft.com%2Fmobile-app-web-api%2Fmobile.write%20openid%20profile%20offline_access&x-client-SKU=MSAL.iOS&x-client-OS=17.4.1&code_challenge={code_challenge}&x-client-CPU=64&redirect_uri={urllib.parse.quote(redirect_uri)}&client-request-id=0207E18F-1598-4BD7-AC0F-705414D8B0F7&client_id={client_id}&x-client-DM=iPhone&return-client-request-id=true&haschrome=1",
         "accept-encoding": "gzip, deflate, br",
     }
     params = {
@@ -261,7 +300,6 @@ async def getRedirect(tx_value, page_view_id, referer_url, session):
 
 
 async def getTokens(code, code_verifier, session):
-    redirect_uri = "msauth.com.lynkco.prod.lynkco-app://auth"
     data = {
         "client_info": "1",
         "scope": f"{scope_base_url}.read {scope_base_url}.write openid profile offline_access",

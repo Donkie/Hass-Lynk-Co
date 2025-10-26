@@ -9,9 +9,7 @@ DATA_UPDATE_COORDINATOR = "data_update_coordinator"
 
 # Config keys
 CONFIG_VIN_KEY = "vin"
-CONFIG_EMAIL_KEY = "email"
-CONFIG_PASSWORD_KEY = "password"
-CONFIG_2FA_KEY = "2fa"
+CONFIG_REDIRECT_URI_KEY = "redirect_uri"
 CONFIG_EXPERIMENTAL_KEY = "experimental"
 CONFIG_SCAN_INTERVAL_KEY = "scan_interval"
 CONFIG_DARK_HOURS_START = "dark_hours_start"
