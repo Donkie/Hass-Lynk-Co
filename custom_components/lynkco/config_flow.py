@@ -20,6 +20,7 @@ from .const import (
     CONFIG_PASSWORD_KEY,
     CONFIG_REDIRECT_URI_KEY,
     CONFIG_SCAN_INTERVAL_KEY,
+    CONFIG_VIN_KEY,
     DOMAIN,
     STORAGE_REFRESH_TOKEN_KEY,
 )
@@ -109,7 +110,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Update the existing config entry
             self.hass.config_entries.async_update_entry(
                 self._reauth_entry,
-                data={"vin": vin},
+                data={CONFIG_VIN_KEY: vin},
             )
             await self.hass.config_entries.async_reload(self._reauth_entry.entry_id)
             return self.async_abort(reason="reauth_successful")
@@ -117,7 +118,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Create new entry
         return self.async_create_entry(
             title="Lynk & Co",
-            data={"vin": vin},
+            data={CONFIG_VIN_KEY: vin},
             description_placeholders={
                 "additional_configuration": "Please use the configuration to enable experimental features."
             },
@@ -267,13 +268,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.context["entry_id"]
         )
 
-        if user_input is not None:
-            return await self.async_step_user(user_input)
-
-        return self.async_show_form(
-            step_id="user",
-            data_schema=STEP_USER_DATA_SCHEMA,
-        )
+        return await self.async_step_user(user_input)
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
