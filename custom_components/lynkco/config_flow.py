@@ -79,7 +79,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     def async_get_options_flow(config_entry):
         """Return the options flow handler."""
-        return OptionsFlowHandler(config_entry)
+        return OptionsFlowHandler()
 
     async def _finalize_with_tokens(
         self, access_token: str, refresh_token: str, id_token: str
@@ -272,9 +272,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        self.config_entry = config_entry
-
     async def async_step_init(self, user_input=None) -> FlowResult:
         if user_input is not None:
             # Save the options and conclude the options flow
