@@ -1,6 +1,25 @@
 from .lynk_co_sensor import LynkCoSensor
 
 
+# Dutch translations for bulb statuses
+BULB_STATUS = {
+    "BULB_STATUS_OK": "OK",
+    "BULB_STATUS_FAULT": "Kapot",
+    "BULB_STATUS_FAILURE": "Kapot",
+    "BULB_STATUS_NO_FAILURE": "OK",
+    "BULB_STATUS_UNSPECIFIED": "Onbekend",
+    "BULB_OK": "OK",
+    "BULB_FAULT": "Kapot",
+    "BULB_FAILURE": "Kapot",
+    "NO_FAILURE": "OK",
+    "FAILURE": "Kapot",
+    "OK": "OK",
+    "FAULT": "Kapot",
+    True: "Kapot",
+    False: "OK",
+}
+
+
 def create_sensors(coordinator, vin):
     sensors = [
         LynkCoSensor(
@@ -8,114 +27,133 @@ def create_sensors(coordinator, vin):
             vin,
             "Lynk & Co Bulb Status Left Turn Any",
             "vehicle_shadow.vms.bulbStatus.leftTurnAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Right Turn Any",
             "vehicle_shadow.vms.bulbStatus.rightTurnAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Low Beam Any",
             "vehicle_shadow.vms.bulbStatus.lowBeamAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Low Beam Left",
             "vehicle_shadow.vms.bulbStatus.lowBeamLeft",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Low Beam Right",
             "vehicle_shadow.vms.bulbStatus.lowBeamRight",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status High Beam Any",
             "vehicle_shadow.vms.bulbStatus.highBeamAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status High Beam Left",
             "vehicle_shadow.vms.bulbStatus.highBeamLeft",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status High Beam Right",
             "vehicle_shadow.vms.bulbStatus.highBeamRight",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Fog Front Any",
             "vehicle_shadow.vms.bulbStatus.fogFrontAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Fog Rear Any",
             "vehicle_shadow.vms.bulbStatus.fogRearAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Stop Any",
             "vehicle_shadow.vms.bulbStatus.stopAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Position Any",
             "vehicle_shadow.vms.bulbStatus.positionAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Day Running Any",
             "vehicle_shadow.vms.bulbStatus.dayRunningAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Trailer Turn Any",
             "vehicle_shadow.vms.bulbStatus.trailerTurnAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Trailer Turn Left Any",
             "vehicle_shadow.vms.bulbStatus.trailerTurnLeftAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Trailer Turn Right Any",
             "vehicle_shadow.vms.bulbStatus.trailerTurnRightAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Trailer Stop Any",
             "vehicle_shadow.vms.bulbStatus.trailerStopAny",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Trailer El Failure",
             "vehicle_shadow.vms.bulbStatus.trailerElFailure",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
             vin,
             "Lynk & Co Bulb Status Multiple",
             "vehicle_shadow.vms.bulbStatus.multiple",
+            state_mapping=BULB_STATUS,
         ),
         LynkCoSensor(
             coordinator,
