@@ -2,12 +2,13 @@
     "domain": "lynkco",
     "name": "Lynk & Co",
     "codeowners": [
+        "@Donkie",
         "@TobiasLaross"
     ],
     "config_flow": true,
-    "documentation": "https://www.github.com/tobiaslaross/Hass-Lynk-Co",
+    "documentation": "https://www.github.com/Donkie/Hass-Lynk-Co",
     "iot_class": "cloud_polling",
-    "issue_tracker": "https://github.com/tobiaslaross/Hass-Lynk-Co/issues",
+    "issue_tracker": "https://github.com/Donkie/Hass-Lynk-Co/issues",
     "requirements": [
         "requests>=2.31.0",
         "pkce>=1.0.3"

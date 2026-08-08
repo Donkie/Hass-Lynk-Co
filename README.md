@@ -1,10 +1,8 @@
 # Lynk & Co Home Assistant Custom Component
 
-## Note
-I will no longer be maintaining this repository, Lynk will soon break the integration but also remove the start_engine endpoint.
 
 ## Introduction
-This custom component allows Home Assistant users to integrate and control their Lynk & Co vehicles directly from Home Assistant.
+This custom component allows Home Assistant users to integrate and control their Lynk & Co 01 (Pre-facelift 2025) vehicles directly from Home Assistant.
 It provides the functionality for multiple users to control pre climate and sensor monitoring.
 A service to start and stop the engine is included as well as lock and unlock doors, and monitor various vehicle
 statuses like battery level, fuel level, and climate control status, enhancing the smart home experience with vehicle management.
@@ -19,6 +17,7 @@ This has been tested on european models only.
   - [Installing the Integration](#installing-the-integration)
 - [Configuration](#configuration)
   - [Initial Setup](#initial-setup)
+  - [Login Methods](#login-methods)
   - [Options Flow](#options-flow)
 - [Features and Usage](#features-and-usage)
   - [Services](#services)
@@ -56,6 +55,16 @@ Configure this integration through the Home Assistant UI.
 2. Click on "Add Integration" and search for "Lynk & Co".
 3. Follow the on-screen instructions to enter your vehicle details and complete the setup.
 
+### Login Methods
+During setup you're offered two ways to log in:
+
+- **Browser Login (recommended)** — you open a link, log in on Lynk & Co's own login page (including any CAPTCHA or 2FA), and then copy an authorization link/code back into Home Assistant. This is currently the only login method that reliably works.
+- **Direct Login (legacy)** — you enter your email and password directly into Home Assistant, and the integration logs in on your behalf in the background. Lynk & Co added a CAPTCHA to this login flow, which the integration cannot solve, so this method fails for most people. It's kept around only in case it starts working again for some accounts.
+
+**Why Browser Login needs manual copy-pasting:** normally, integrations like this redirect you straight back into Home Assistant after login, with no copy-pasting involved. That requires the vehicle manufacturer to allow Home Assistant's standard OAuth callback URL. Lynk & Co has not done this — the login flow only recognizes their own mobile app's internal link, which a browser can't open automatically, so you have to grab it by hand and paste it back in. This is a limitation on Lynk & Co's side, not something this integration can work around on its own.
+
+I'm in contact with Lynk & Co and have asked them to allow that standard callback URL. If they do, Browser Login can become a normal one-click login with no manual copying required. There's no timeline for this, and it depends entirely on Lynk & Co — if you'd like to help move it along, a polite nudge to Lynk & Co support referencing this integration can't hurt.
+
 ### Options Flow
 Options can be configured through the Options Flow in the Home Assistant UI:
 
@@ -77,7 +86,7 @@ This component offers various services to interact with your vehicle, including:
 - `start_flash_lights` / `stop_flash_lights`: Activates or deactivates hazard lights.
 - `start_honk` / `stop_honk`: Activates or deactivates honk.
 - `start_honk_flash`: Activates honk and hazard lights.
-- `start_engine` / `stop_engine`: Starts or stops the engine. (Note: This is not an officially documented Lynk & Co feature.)
+- `start_engine` / `stop_engine`: Starts or stops the engine.
 - `force_update_data`: Forcing update data from the vehicle, bypassing night limit.
 - `refresh_tokens`: Refreshes authentication tokens, this should not be needed, handled automatically.
 
@@ -120,6 +129,7 @@ For a comprehensive list of all entities, including detailed descriptions and ad
 
 ## Troubleshooting
 
+- **Direct Login fails / gets stuck**: This is expected — see [Login Methods](#login-methods). Use Browser Login instead.
 - **2FA Code Issues**: Ensure the code is entered correctly and within its validity period. Generate a new code if issues persist.
 - **Connection Issues**: Check that your vehicle is in an area with good cellular reception and that your Lynk & Co account is active and not facing any service disruptions.
 
